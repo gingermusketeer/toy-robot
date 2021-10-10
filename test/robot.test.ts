@@ -23,26 +23,36 @@ test("robot can move", (t) => {
   t.is(r.perform("REPORT"), "0,1,NORTH");
 });
 
-test("robot can rotate", (t) => {
+test("robot can rotate in a clockwise circle", (t) => {
   const r = new Robot();
   r.perform("PLACE 0,0,NORTH");
-  r.perform("RIGHT");
 
+  r.perform("RIGHT");
   t.is(r.perform("REPORT"), "0,0,EAST");
+
+  r.perform("RIGHT");
+  t.is(r.perform("REPORT"), "0,0,SOUTH");
+
+  r.perform("RIGHT");
+  t.is(r.perform("REPORT"), "0,0,WEST");
+
+  r.perform("RIGHT");
+  t.is(r.perform("REPORT"), "0,0,NORTH");
 });
 
-test("robot can rotate in a circle", (t) => {
+test("robot can rotate in an anticlockwise circle", (t) => {
   const r = new Robot();
   r.perform("PLACE 0,0,NORTH");
-  r.perform("RIGHT");
-  r.perform("RIGHT");
-  r.perform("RIGHT");
-  r.perform("RIGHT");
 
-  t.is(r.perform("REPORT"), "0,0,NORTH");
   r.perform("LEFT");
+  t.is(r.perform("REPORT"), "0,0,WEST");
+
   r.perform("LEFT");
+  t.is(r.perform("REPORT"), "0,0,SOUTH");
+
   r.perform("LEFT");
+  t.is(r.perform("REPORT"), "0,0,EAST");
+
   r.perform("LEFT");
   t.is(r.perform("REPORT"), "0,0,NORTH");
 });
