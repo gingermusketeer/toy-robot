@@ -46,16 +46,16 @@ export default class Robot {
   }
   move(): void {
     const [x, y, direction] = this.#position;
-    let newPosition;
-    if (direction == Heading.NORTH) {
-      newPosition = [x, y + 1, direction];
-    } else if (direction == Heading.SOUTH) {
-      newPosition = [x, y - 1, direction];
-    } else if (direction == Heading.EAST) {
-      newPosition = [x + 1, y, direction];
-    } else if (direction == Heading.WEST) {
-      newPosition = [x - 1, y, direction];
+    let yModifier = 0;
+    let xModifier = 0;
+    if (direction % 2 === 0) {
+      // Heading north or south
+      yModifier = direction == Heading.NORTH ? 1 : -1;
+    } else {
+      // Heading east or west
+      xModifier = direction == Heading.EAST ? 1 : -1;
     }
+    let newPosition: Position = [x + xModifier, y + yModifier, direction];
     const [newX, newY] = newPosition;
     if (validatePosition(newX, newY)) {
       this.#position = newPosition;
