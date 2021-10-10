@@ -27,5 +27,8 @@
     "nodeArguments": [
       "--loader=ts-node/esm"
     ]
+  },
+  "engines": {
+    "node": ">=14.17.0"
   }
 }
