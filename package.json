@@ -4,7 +4,9 @@
   "description": "A tabletop robot simulator",
   "repository": "https://github.com/gingermusketeer/toy-robot",
   "license": "UNLICENSED",
+  "bin": "./bin/toy-robot",
   "scripts": {
+    "start": "./bin/toy-robot",
     "test": "ava"
   },
   "dependencies": {
