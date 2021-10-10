@@ -1,3 +1,6 @@
+// Table is 5x5 so we limit the x and y to be between 0 and 4
+const MAX_INDEX = 4;
+
 enum Command {
   MOVE = "MOVE",
   LEFT = "LEFT",
@@ -12,7 +15,7 @@ function parseTask(task): [Command | null, string | null] {
 }
 
 function validatePosition(x: number, y: number): boolean {
-  return x >= 0 && x <= 4 && y >= 0 && y <= 4;
+  return x >= 0 && x <= MAX_INDEX && y >= 0 && y <= MAX_INDEX;
 }
 
 enum Heading {
@@ -60,7 +63,7 @@ export default class Robot {
   }
   left(): void {
     const [x, y, direction] = this.#position;
-    const newDirection = direction === 0 ? 3 : direction - 1;
+    const newDirection = direction === 0 ? HEADINGS.length - 1 : direction - 1;
     this.#position = [x, y, newDirection];
   }
 
