@@ -6,7 +6,11 @@ function parseArgs(args: string[]) {
   if (args.length == 1) {
     return fs.createReadStream(args[0]);
   }
+  if (args.length > 1) {
+    throw new Error(`expected 1 argument got ${args.length}`);
+  }
 }
+
 export default class Cli {
   #robot: Robot = new Robot();
   #inStream: stream.Readable;

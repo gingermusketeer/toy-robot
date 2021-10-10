@@ -64,3 +64,11 @@ test("robot can avoid destruction", (t) => {
 
   t.is(r.perform("REPORT"), "0,0,WEST");
 });
+
+test("robot ingores invalid positions", (t) => {
+  const r = new Robot();
+  r.perform("PLACE 0,0,WEST");
+  r.perform("PLACE 0,0,pizza");
+
+  t.is(r.perform("REPORT"), "0,0,WEST");
+});

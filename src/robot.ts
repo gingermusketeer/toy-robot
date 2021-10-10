@@ -1,5 +1,6 @@
 // Table is 5x5 so we limit the x and y to be between 0 and 4
 const MAX_INDEX = 4;
+const HEADINGS = ["NORTH", "EAST", "SOUTH", "WEST"];
 
 enum Command {
   MOVE = "MOVE",
@@ -9,41 +10,38 @@ enum Command {
   PLACE = "PLACE",
 }
 
-function parseTask(task): [Command | null, string | null] {
-  const [commandStr, args] = task.split(" ");
-  return [Command[commandStr], args];
-}
-
-function validatePosition(x: number, y: number): boolean {
-  return x >= 0 && x <= MAX_INDEX && y >= 0 && y <= MAX_INDEX;
-}
-
 enum Heading {
   NORTH,
   EAST,
   SOUTH,
   WEST,
 }
-const HEADINGS = ["NORTH", "EAST", "SOUTH", "WEST"];
+
 type Position = [number, number, Heading];
 
 export default class Robot {
   #position: Position | null = null;
 
   perform(task: string): string | null {
-    const [command, args] = parseTask(task);
+    const [command, args] = this.#parseTask(task);
     const ignoreCommand = this.#position == null && command != Command.PLACE;
     if (command == null || ignoreCommand) {
       return null;
     }
+
+    // Now we have a valid command but the args may be invalid.
     return this[command.toLowerCase()](args);
   }
 
   place(args: string | null): void {
     const [x, y, directionStr] = args.split(",");
     const direction = HEADINGS.indexOf(directionStr);
+    if (direction < 0) {
+      return;
+    }
     this.#position = [Number.parseInt(x), Number.parseInt(y), direction];
   }
+
   move(): void {
     const [x, y, direction] = this.#position;
     let yModifier = 0;
@@ -57,10 +55,11 @@ export default class Robot {
     }
     let newPosition: Position = [x + xModifier, y + yModifier, direction];
     const [newX, newY] = newPosition;
-    if (validatePosition(newX, newY)) {
+    if (this.#validatePosition(newX, newY)) {
       this.#position = newPosition;
     }
   }
+
   left(): void {
     const [x, y, direction] = this.#position;
     const newDirection = direction === 0 ? HEADINGS.length - 1 : direction - 1;
@@ -79,5 +78,14 @@ export default class Robot {
     }
     const [x, y, direction] = this.#position;
     return `${x},${y},${HEADINGS[direction]}`;
+  }
+
+  #parseTask(task): [Command | null, string | null] {
+    const [commandStr, args] = task.split(" ");
+    return [Command[commandStr], args];
+  }
+
+  #validatePosition(x: number, y: number): boolean {
+    return x >= 0 && x <= MAX_INDEX && y >= 0 && y <= MAX_INDEX;
   }
 }
