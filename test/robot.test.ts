@@ -31,6 +31,22 @@ test("robot can rotate", (t) => {
   t.is(r.perform("REPORT"), "0,0,EAST");
 });
 
+test("robot can rotate in a circle", (t) => {
+  const r = new Robot();
+  r.perform("PLACE 0,0,NORTH");
+  r.perform("RIGHT");
+  r.perform("RIGHT");
+  r.perform("RIGHT");
+  r.perform("RIGHT");
+
+  t.is(r.perform("REPORT"), "0,0,NORTH");
+  r.perform("LEFT");
+  r.perform("LEFT");
+  r.perform("LEFT");
+  r.perform("LEFT");
+  t.is(r.perform("REPORT"), "0,0,NORTH");
+});
+
 test("robot can avoid destruction", (t) => {
   const r = new Robot();
   r.perform("PLACE 0,0,WEST");

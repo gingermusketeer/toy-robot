@@ -14,12 +14,14 @@ function parseTask(task): [Command | null, string | null] {
 function validatePosition(x: number, y: number): boolean {
   return x >= 0 && x <= 4 && y >= 0 && y <= 4;
 }
+
 enum Heading {
-  NORTH = "NORTH",
-  EAST = "EAST",
-  SOUTH = "SOUTH",
-  WEST = "WEST",
+  NORTH,
+  EAST,
+  SOUTH,
+  WEST,
 }
+const HEADINGS = ["NORTH", "EAST", "SOUTH", "WEST"];
 type Position = [number, number, Heading];
 
 export default class Robot {
@@ -36,7 +38,7 @@ export default class Robot {
 
   place(args: string | null): void {
     const [x, y, directionStr] = args.split(",");
-    const direction = Heading[directionStr];
+    const direction = HEADINGS.indexOf(directionStr);
     this.#position = [Number.parseInt(x), Number.parseInt(y), direction];
   }
   move(): void {
@@ -58,28 +60,21 @@ export default class Robot {
   }
   left(): void {
     const [x, y, direction] = this.#position;
-    if (direction == Heading.NORTH) {
-      this.#position = [x, y, Heading.WEST];
-    } else if (direction == Heading.SOUTH) {
-      this.#position = [x, y, Heading.EAST];
-    } else {
-      this.#position = [x, y, Heading.NORTH];
-    }
+    const newDirection = direction === 0 ? 3 : direction - 1;
+    this.#position = [x, y, newDirection];
   }
+
   right(): void {
     const [x, y, direction] = this.#position;
-    if (direction == Heading.NORTH) {
-      this.#position = [x, y, Heading.EAST];
-    } else if (direction == Heading.EAST) {
-      this.#position = [x, y, Heading.SOUTH];
-    } else if (direction == Heading.SOUTH) {
-      this.#position = [x, y, Heading.WEST];
-    } else {
-      this.#position = [x, y, Heading.NORTH];
-    }
+    const newDirection = (direction + 1) % HEADINGS.length;
+    this.#position = [x, y, newDirection];
   }
 
   report(): string {
-    return this.#position?.join(",");
+    if (this.#position == null) {
+      return "";
+    }
+    const [x, y, direction] = this.#position;
+    return `${x},${y},${HEADINGS[direction]}`;
   }
 }
