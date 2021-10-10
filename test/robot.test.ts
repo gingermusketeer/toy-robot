@@ -28,7 +28,7 @@ test("robot can rotate", (t) => {
   r.perform("PLACE 0,0,NORTH");
   r.perform("RIGHT");
 
-  t.is(r.perform("REPORT"), "0,1,EAST");
+  t.is(r.perform("REPORT"), "0,0,EAST");
 });
 
 test("robot can avoid destruction", (t) => {
